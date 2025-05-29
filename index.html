@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Pembelajaran Kerangka Manusia AR</title>
+    <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar-nft.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1>🦴 Pembelajaran Kerangka Manusia AR</h1>
+        <p>Jelajahi anatomi kerangka manusia dalam 3D menggunakan teknologi Augmented Reality. Arahkan kamera ke marker HIRO untuk memulai pengalaman pembelajaran interaktif.</p>
+        <button class="start-button" onclick="startAR()">🚀 Mulai AR</button>
+        <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.8;">
+            <p>📱 Pastikan kamera diizinkan untuk pengalaman terbaik</p>
+            <p>🖨️ Cetak marker HIRO dari: <a href="https://raw.githubusercontent.com/AR-js-org/AR.js/master/data/images/hiro.png" target="_blank" style="color: #ffeb3b;">Download Marker</a></p>
+        </div>
+    </div>
+
+    <!-- AR Scene -->
+    <a-scene
+        id="arScene"
+        embedded
+        arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;"
+        style="display: none;"
+        vr-mode-ui="enabled: false"
+        renderer="logarithmicDepthBuffer: true; colorManagement: true; physicallyCorrectLights: true; antialias: true;"
+        loading-screen="enabled: false"
+        light="defaultLightsEnabled: false">
+        
+        <a-assets>
+            <!-- Placeholder untuk model GLB - bisa diganti sesuai kebutuhan -->
+            <a-asset-item id="skeleton-model" src="/models/skeleton.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Marker HIRO -->
+        <a-marker preset="hiro" id="markerHiro">
+            <!-- Model 3D Kerangka -->
+            <a-entity
+                id="skeletonModel"
+                gltf-model="#skeleton-model"
+                scale="0.2 0.2 0.2"
+                position="0 0 0"
+                rotation="-90 0 0"
+                animation-mixer="clip: *"
+                shadow="cast: true; receive: false">
+            </a-entity>
+            
+            <!-- Enhanced Lighting Setup -->
+            <a-light type="ambient" color="#ffffff" intensity="0.8"></a-light>
+            <a-light type="directional" position="2 4 2" color="#ffffff" intensity="1.2" shadow="cast: true"></a-light>
+            <a-light type="point" position="-2 2 2" color="#ffeeaa" intensity="0.6"></a-light>
+            <a-light type="point" position="2 2 -2" color="#aaeeff" intensity="0.4"></a-light>
+        </a-marker>
+
+        <!-- Camera -->
+        <a-entity camera></a-entity>
+    </a-scene>
+
+    <!-- Control Buttons -->
+    <div class="controls" id="controls">
+        <button class="control-btn" onclick="rotateModel(-15)" title="Putar Kiri">⟲</button>
+        <button class="control-btn" onclick="rotateModel(15)" title="Putar Kanan">⟳</button>
+        <button class="control-btn" onclick="scaleModel(0.1)" title="Perbesar">+</button>
+        <button class="control-btn" onclick="scaleModel(-0.1)" title="Perkecil">-</button>
+        <button class="control-btn" onclick="resetModel()" title="Reset Posisi">🔄</button>
+        <button class="control-btn" onclick="toggleInfo()" title="Informasi">ℹ️</button>
+        <button class="control-btn" onclick="goHome()" title="Kembali">↩️</button>
+    </div>
+
+    <!-- Position Control Buttons -->
+    <div class="position-controls" id="positionControls">
+        <button class="position-btn" onclick="setModelPosition('standing')" title="Posisi Berdiri">🧍</button>
+        <button class="position-btn" onclick="setModelPosition('lying')" title="Posisi Terlentang">🛌</button>
+        <button class="position-btn" onclick="setModelPosition('side')" title="Posisi Miring">🤸</button>
+        <button class="position-btn" onclick="setModelPosition('sitting')" title="Posisi Duduk">🪑</button>
+        <button class="position-btn" onclick="flipModel()" title="Balik Model">🔄</button>
+    </div>
+
+    <!-- Info Panel -->
+    <div class="info-panel" id="infoPanel">
+        <h3>🦴 Kerangka Manusia</h3>
+        <p><strong>Fakta Menarik:</strong></p>
+        <p>• Tubuh manusia dewasa memiliki 206 tulang</p>
+        <p>• Tulang terkuat adalah tulang paha (femur)</p>
+        <p>• Tulang terkecil ada di telinga tengah</p>
+        <p>• Kerangka menyusun sekitar 15% berat tubuh</p>
+        <p>• Tulang terus berkembang hingga usia 30 tahun</p>
+        <p><strong>Fungsi Utama:</strong></p>
+        <p>• Memberikan struktur dan bentuk tubuh</p>
+        <p>• Melindungi organ vital</p>
+        <p>• Memungkinkan gerakan</p>
+        <p>• Memproduksi sel darah</p>
+        <p>• Menyimpan mineral</p>
+    </div>
+
+    <!-- Marker Detection Info -->
+    <div class="marker-info" id="markerInfo">
+        <p>📷 Arahkan kamera ke marker HIRO</p>
+        <p>🎯 Pastikan marker terlihat jelas dan tidak terpotong</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
